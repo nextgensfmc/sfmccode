@@ -44,26 +44,47 @@ function insertSnippet(value, targetId) {
 }
 
 function run(type) {
-  const code = document.getElementById(type + "Code").value;
+  const code = document.getElementById(type + "Code").value.trim();
   let output = "";
   let log = "";
 
   try {
-    if (!code.trim()) throw new Error("Code is empty");
+    if (!code) throw new Error("❗ Code is empty.");
 
-    if (type === "ampscript" && !code.includes("%%")) throw new Error("Missing %% in AMPscript.");
-    if (type === "sql" && !code.toLowerCase().includes("select")) throw new Error("SQL must contain SELECT.");
-    if (type === "json") {
-      const parsed = JSON.parse(code);
-      output = JSON.stringify(parsed, null, 2);
-      log = "✅ Valid JSON";
-    } else {
-      output = "// Simulated Output for " + type + "\\n" + code;
-      log = "✅ Executed Successfully";
+    switch (type) {
+      case "ampscript":
+        if (!code.includes("%%")) throw new Error("❌ AMPscript must include %% syntax.");
+        output = "// AMPscript interpreted output (simulated)\n" + code;
+        log = "✅ AMPscript looks valid.";
+        break;
+
+      case "ssjs":
+        if (!code.includes("Write(")) log += "⚠️ No Write() statement detected.\n";
+        if (!code.includes("Platform.Load")) log += "⚠️ Missing Platform.Load for Core.\n";
+        output = "// SSJS interpreted output (simulated)\n" + code;
+        log += "✅ SSJS looks syntactically fine.";
+        break;
+
+      case "sql":
+        if (!/select/i.test(code)) throw new Error("❌ SQL must contain SELECT.");
+        if (!/from/i.test(code)) log += "⚠️ Missing FROM clause.\n";
+        output = "-- Simulated SQL Output:\n" + code;
+        log += "✅ SQL syntax appears valid.";
+        break;
+
+      case "json":
+        const parsed = JSON.parse(code);
+        output = JSON.stringify(parsed, null, 2);
+        log = "✅ Valid JSON";
+        break;
+
+      default:
+        throw new Error("Unsupported type: " + type);
     }
+
   } catch (e) {
-    output = "// Error Output";
-    log = "❌ " + e.message;
+    output = "// 🔴 Error Output\n";
+    log = e.message || "❌ Unknown Error";
   }
 
   document.getElementById(type + "Out").innerText = output;
