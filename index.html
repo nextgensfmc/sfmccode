@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Next-Gen SFMC Playground</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>🚀 Next-Gen SFMC Playground</h1>
+    <label>
+      <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()"> Dark Mode
+    </label>
+  </header>
+  <div class="tabs">
+    <button onclick="switchTab('ampscript')">AMPscript</button>
+    <button onclick="switchTab('ssjs')">SSJS</button>
+    <button onclick="switchTab('sql')">SQL</button>
+    <button onclick="switchTab('json')">JSON</button>
+  </div>
+  <main>
+    <div class="tab" id="ampscriptTab">
+      <h2>AMPscript Playground</h2>
+      <textarea id="ampscriptCode" rows="8" placeholder="Write your AMPscript here..."></textarea>
+      <button onclick="run('ampscript')">▶ Run AMPscript</button>
+      <button onclick="copyOutput('ampscriptOut')">📋 Copy Output</button>
+      <pre id="ampscriptOut">// Output</pre>
+      <pre id="ampscriptLog">// Log</pre>
+    </div>
+    <!-- Repeat structure for SSJS, SQL, JSON tabs if needed -->
+  </main>
+  <script>
+    switchTab('ampscript');
+    function copyOutput(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied to clipboard!');
+      }, () => {
+        alert('Failed to copy.');
+      });
+    }
+  </script>
+</body>
+</html>
