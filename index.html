@@ -2,200 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SFMC Code Toolkit</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #f8fafc;
-      color: #222;
-    }
-    header {
-      background: #0d47a1;
-      color: white;
-      padding: 1rem 2rem;
-      font-size: 1.5rem;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    select {
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-    .tab-btn {
-      padding: 0.6rem 1.2rem;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      cursor: pointer;
-      background: white;
-    }
-    .tab-btn.active {
-      background: #0072ef;
-      color: white;
-    }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 1rem;
-    }
-    .card {
-      background: white;
-      padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    textarea {
-      width: 100%;
-      height: 250px;
-      padding: 1rem;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      background: #f9f9f9;
-      font-family: monospace;
-      margin-bottom: 0.5rem;
-    }
-    pre {
-      background: #e3f2fd;
-      padding: 1rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      overflow-x: auto;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+  <title>Next-Gen AMPscript Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    SFMC Code Toolkit
-    <button onclick="toggleDarkMode()">🌓</button>
+    <h1>Next-Gen SFMC | AMPscript Playground</h1>
+    <p>Write and simulate AMPscript instantly</p>
   </header>
 
-  <div class="tabs">
-    <button class="tab-btn" onclick="switchTab('amp')">AMPscript</button>
-    <button class="tab-btn" onclick="switchTab('ssjs')">SSJS</button>
-    <button class="tab-btn" onclick="switchTab('sql')">SQL</button>
-    <button class="tab-btn" onclick="switchTab('json')">JSON</button>
-    <button class="tab-btn" onclick="switchTab('api')">API</button>
-  </div>
+  <main>
+    <label for="snippet">Insert AMPscript Example:</label>
+    <select id="snippet" onchange="loadSnippet()">
+      <option value="">-- Choose a snippet --</option>
+      <option value="personalization">Personalization</option>
+      <option value="ifElse">If/Else</option>
+      <option value="dateFormat">Date Formatting</option>
+      <option value="loop">FOR Loop</option>
+      <option value="emailAttr">Retrieve Email</option>
+      <option value="lookup">Lookup from Data Extension</option>
+      <option value="uppercase">Uppercase</option>
+    </select>
+    <br><br>
 
-  <div class="container">
-    <div id="amp" class="card">
-      <h2>AMPscript</h2>
-      <select onchange="insertSample('amp', this.value)">
-        <option value="">-- Select Sample --</option>
-        <option value="1">Hello First Name</option>
-        <option value="2">If Block</option>
-        <option value="3">Loop Example</option>
-      </select>
-      <textarea id="ampText"></textarea>
-      <pre id="ampLog"></pre>
-    </div>
+    <textarea id="code">// Write your AMPscript here...</textarea>
+    <button onclick="runCode()">Run</button>
+<button onclick="copyToClipboard()">Copy to Clipboard</button>
 
-    <div id="ssjs" class="card hidden">
-      <h2>SSJS</h2>
-      <select onchange="insertSample('ssjs', this.value)">
-        <option value="">-- Select Sample --</option>
-        <option value="1">Basic Greeting</option>
-        <option value="2">For Loop</option>
-        <option value="3">Retrieve DataExtension</option>
-      </select>
-      <textarea id="ssjsText"></textarea>
-      <pre id="ssjsLog"></pre>
-    </div>
+    <h2>Simulated Output:</h2>
+    <pre id="output">// Output will appear here</pre>
+  </main>
 
-    <div id="sql" class="card hidden">
-      <h2>SQL</h2>
-      <select onchange="insertSample('sql', this.value)">
-        <option value="">-- Select Sample --</option>
-        <option value="1">Active Contacts</option>
-        <option value="2">Join Two DEs</option>
-        <option value="3">Group By Example</option>
-      </select>
-      <textarea id="sqlText"></textarea>
-      <pre id="sqlLog"></pre>
-    </div>
+  <footer>
+    <p>🚀 Built by Next-Gen SFMC Team | <a href="https://nextgensfmc.blogspot.com">Back to Blog</a></p>
+  </footer>
 
-    <div id="json" class="card hidden">
-      <h2>JSON</h2>
-      <select onchange="insertSample('json', this.value)">
-        <option value="">-- Select Sample --</option>
-        <option value="1">Basic Object</option>
-        <option value="2">Nested Object</option>
-        <option value="3">Array of Objects</option>
-      </select>
-      <textarea id="jsonText"></textarea>
-      <pre id="jsonLog"></pre>
-    </div>
-
-    <div id="api" class="card hidden">
-      <h2>API Request</h2>
-      <select onchange="insertSample('api', this.value)">
-        <option value="">-- Select Sample --</option>
-        <option value="1">Access Token Request</option>
-        <option value="2">DataExtension GET</option>
-        <option value="3">Send Email REST</option>
-      </select>
-      <textarea id="apiText"></textarea>
-      <pre id="apiLog"></pre>
-    </div>
-  </div>
-
-  <script>
-    function switchTab(tab) {
-      document.querySelectorAll('.card').forEach(el => el.classList.add('hidden'));
-      document.getElementById(tab).classList.remove('hidden');
-    }
-
-    function insertSample(type, sample) {
-      const samples = {
-        amp: {
-          1: `%%[ SET @firstName = [FirstName] SET @greeting = CONCAT("Hello ", @firstName) ]%%\n%%=v(@greeting)=%%`,
-          2: `%%[ IF [Age] > 18 THEN SET @status = "Adult" ELSE SET @status = "Minor" ENDIF ]%%\n%%=v(@status)=%%`,
-          3: `%%[ FOR @i = 1 TO 5 DO SET @row = CONCAT("Row ", @i) OUTPUT(CONCAT(@row, "<br>")) NEXT @i ]%%`
-        },
-        ssjs: {
-          1: `<script runat="server">\n  Platform.Load("core", "1.1.1");\n  var firstName = Attribute.GetValue("FirstName");\n  Write("Hello " + firstName);\n</script>`,
-          2: `<script runat="server">\n  for (var i = 0; i < 5; i++) {\n    Write("Line " + i + "<br>");\n  }\n</script>`,
-          3: `<script runat="server">\n  var rows = DataExtension.Init("MyDE").Rows.Retrieve();\n  Write("Found: " + rows.length);\n</script>`
-        },
-        sql: {
-          1: `SELECT FirstName, Email FROM [Contacts] WHERE IsActive = 1`,
-          2: `SELECT A.Email, B.OrderId FROM Contacts A INNER JOIN Orders B ON A.ContactID = B.ContactID`,
-          3: `SELECT Country, COUNT(*) FROM [Subscribers] GROUP BY Country`
-        },
-        json: {
-          1: `{"name": "John", "age": 30}`,
-          2: `{"user": {"name": "Jane", "info": {"age": 25, "location": "NY"}}}`,
-          3: `[{"id": 1, "name": "A"}, {"id": 2, "name": "B"}]`
-        },
-        api: {
-          1: `POST /v2/token HTTP/1.1\nHost: auth.exacttargetapis.com\n{\n  "client_id": "xxxx",\n  "client_secret": "yyyy",\n  "grant_type": "client_credentials"\n}`,
-          2: `GET /data/v1/customobjectdata/key/Contact/key/123 HTTP/1.1`,
-          3: `POST /messaging/v1/messageDefinitionSends/key:welcome/send`
-        }
-      };
-      const id = type + 'Text';
-      const logId = type + 'Log';
-      document.getElementById(id).value = samples[type][sample] || '';
-      document.getElementById(logId).innerText = '// Ready to compile...';
-    }
-
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark');
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
