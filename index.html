@@ -1,47 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Next-Gen SFMC Playground</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SFMC Code AI Toolkit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0f2f5;
+      --fg: #222;
+      --accent: #005eff;
+      --card: #fff;
+      --border: #ddd;
+      --dark-bg: #1a1a2e;
+      --dark-fg: #f5f5f5;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: var(--dark-bg);
+      color: var(--dark-fg);
+    }
+    header {
+      background: var(--accent);
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .tab-btn {
+      padding: 0.6rem 1.2rem;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+    .container {
+      max-width: 960px;
+      margin: auto;
+      padding: 1rem;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: monospace;
+      border: 1px solid var(--border);
+      resize: vertical;
+    }
+    pre {
+      background: #eee;
+      padding: 1rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      overflow-x: auto;
+    }
+    .hidden {
+      display: none;
+    }
+    .theme-toggle {
+      padding: 0.4rem 0.8rem;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>🚀 Next-Gen SFMC Playground</h1>
-    <label>
-      <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()"> Dark Mode
-    </label>
+    <div>SFMC Code AI Toolkit</div>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
   </header>
+
   <div class="tabs">
-    <button onclick="switchTab('ampscript')">AMPscript</button>
-    <button onclick="switchTab('ssjs')">SSJS</button>
-    <button onclick="switchTab('sql')">SQL</button>
-    <button onclick="switchTab('json')">JSON</button>
+    <button class="tab-btn" data-tab="amp">AMPscript</button>
+    <button class="tab-btn" data-tab="ssjs">SSJS</button>
+    <button class="tab-btn" data-tab="sql">SQL</button>
+    <button class="tab-btn" data-tab="json">JSON</button>
   </div>
-  <main>
-    <div class="tab" id="ampscriptTab">
-      <h2>AMPscript Playground</h2>
-      <textarea id="ampscriptCode" rows="8" placeholder="Write your AMPscript here..."></textarea>
-      <button onclick="run('ampscript')">▶ Run AMPscript</button>
-      <button onclick="copyOutput('ampscriptOut')">📋 Copy Output</button>
-      <pre id="ampscriptOut">// Output</pre>
-      <pre id="ampscriptLog">// Log</pre>
+
+  <div class="container">
+    <div id="amp" class="card tab-content">
+      <h3>AMPscript</h3>
+      <select onchange="loadSample(this, 'ampInput')">
+        <option value="">-- Select Sample --</option>
+      </select>
+      <textarea id="ampInput"></textarea>
+      <button onclick="runCode('amp')">Run</button>
+      <h4>Debug Log</h4>
+      <pre id="ampLog">Waiting...</pre>
     </div>
-    <!-- Repeat structure for SSJS, SQL, JSON tabs if needed -->
-  </main>
+
+    <div id="ssjs" class="card tab-content hidden">
+      <h3>SSJS</h3>
+      <select onchange="loadSample(this, 'ssjsInput')">
+        <option value="">-- Select Sample --</option>
+      </select>
+      <textarea id="ssjsInput"></textarea>
+      <button onclick="runCode('ssjs')">Run</button>
+      <h4>Debug Log</h4>
+      <pre id="ssjsLog">Waiting...</pre>
+    </div>
+
+    <div id="sql" class="card tab-content hidden">
+      <h3>SQL</h3>
+      <select onchange="loadSample(this, 'sqlInput')">
+        <option value="">-- Select Sample --</option>
+      </select>
+      <textarea id="sqlInput"></textarea>
+      <button onclick="runCode('sql')">Run</button>
+      <h4>Debug Log</h4>
+      <pre id="sqlLog">Waiting...</pre>
+    </div>
+
+    <div id="json" class="card tab-content hidden">
+      <h3>JSON</h3>
+      <select onchange="loadSample(this, 'jsonInput')">
+        <option value="">-- Select Sample --</option>
+      </select>
+      <textarea id="jsonInput"></textarea>
+      <button onclick="runCode('json')">Validate</button>
+      <h4>Debug Log</h4>
+      <pre id="jsonLog">Waiting...</pre>
+    </div>
+  </div>
+
   <script>
-    switchTab('ampscript');
-    function copyOutput(id) {
-      const text = document.getElementById(id).innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert('Copied to clipboard!');
-      }, () => {
-        alert('Failed to copy.');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const samples = {};
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabContents.forEach(c => c.classList.add('hidden'));
+        tabBtns.forEach(b => b.classList.remove('active'));
+        document.getElementById(btn.dataset.tab).classList.remove('hidden');
+        btn.classList.add('active');
       });
+    });
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
     }
+
+    async function loadSamples() {
+      const res = await fetch('sample-debug.json');
+      const data = await res.json();
+      Object.assign(samples, data);
+      for (const type in data) {
+        const sel = document.querySelector(`#${type} select`);
+        data[type].forEach((code, i) => {
+          const opt = document.createElement('option');
+          opt.value = i;
+          opt.textContent = `Sample ${i + 1}`;
+          sel.appendChild(opt);
+        });
+      }
+    }
+
+    function loadSample(sel, targetId) {
+      const type = sel.closest('.tab-content').id;
+      const idx = sel.value;
+      document.getElementById(targetId).value = samples[type][idx] || '';
+    }
+
+    function runCode(type) {
+      const code = document.getElementById(type + 'Input').value;
+      let log = '';
+      try {
+        if (!code.trim()) throw new Error('Code is empty');
+        if (type === 'ampscript' && !code.includes('%%')) throw new Error('AMPscript must include %%');
+        if (type === 'sql' && !code.toLowerCase().includes('select')) throw new Error('SQL must contain SELECT');
+        if (type === 'json') JSON.parse(code);
+        log = '✅ Code is valid';
+      } catch (e) {
+        log = '❌ ' + e.message;
+      }
+      document.getElementById(type + 'Log').textContent = log;
+    }
+
+    loadSamples();
   </script>
 </body>
 </html>
