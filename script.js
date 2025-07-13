@@ -1,5 +1,3 @@
-// script.js
-
 const snippetMap = {
   ampscript: {
     personalization: `%%[\nVAR @firstName\nSET @firstName = "Mahesh"\n]%%\nHello %%=v(@firstName)=%%, welcome to Next-Gen SFMC!`,
@@ -60,11 +58,14 @@ function loadCategorySnippets() {
 
   snippetDropdown.innerHTML = '<option value="">-- Choose a snippet --</option>';
 
-  for (const key in snippetMap[category]) {
+  if (snippetMap.hasOwnProperty(category)) {
+    for (const key in snippetMap[category]) {
     const option = document.createElement("option");
     option.value = key;
     option.text = key[0].toUpperCase() + key.slice(1);
-    snippetDropdown.appendChild(option);
+          snippetDropdown.appendChild(option);
+    }
+  }
   }
 }
 

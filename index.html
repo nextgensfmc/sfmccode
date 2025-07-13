@@ -9,26 +9,27 @@
 <body>
   <header>
     <h1>Next-Gen SFMC | AMPscript Playground</h1>
-    <p>Write and simulate AMPscript instantly</p>
+    <p>Write and simulate AMPscript instantly (AMPscript, SSJS, SQL, JSON, API)</p>
   </header>
 
   <main>
-    <label for="snippet">Insert AMPscript Example:</label>
+    <label for="category">Choose Code Type:</label>
+    <select id="category" onchange="loadCategorySnippets()">
+      <option value="ampscript">AMPscript</option>
+      <option value="ssjs">SSJS</option>
+      <option value="sql">SQL</option>
+      <option value="json">JSON</option>
+      <option value="api">API</option>
+    </select>
+
+    <label for="snippet">Insert Example Snippet:</label>
     <select id="snippet" onchange="loadSnippet()">
       <option value="">-- Choose a snippet --</option>
-      <option value="personalization">Personalization</option>
-      <option value="ifElse">If/Else</option>
-      <option value="dateFormat">Date Formatting</option>
-      <option value="loop">FOR Loop</option>
-      <option value="emailAttr">Retrieve Email</option>
-      <option value="lookup">Lookup from Data Extension</option>
-      <option value="uppercase">Uppercase</option>
     </select>
-    <br><br>
 
-    <textarea id="code">// Write your AMPscript here...</textarea>
+    <textarea id="code">// Write your code here...</textarea>
     <button onclick="runCode()">Run</button>
-<button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
 
     <h2>Simulated Output:</h2>
     <pre id="output">// Output will appear here</pre>
